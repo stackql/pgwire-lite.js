@@ -15,14 +15,12 @@ describe('Secure TLS Connection Tests', function() {
   const key = fs.readFileSync('/home/javen/ssl-test/client_key.pem');
   const ca = fs.readFileSync('/home/javen/ssl-test/server_cert.pem');
 
+  let client;
 
-  // Ensure the server is stopped after the tests
-  afterEach(() => {
-    try {
-      execSync('bash ./stop-server.sh');
-      console.log('Server stopped successfully.');
-    } catch (err) {
-      console.error('Failed to stop the server:', err);
+  afterEach(async () => {
+    // Destroy the client after each test if it exists
+    if (client) {
+      client.destroy();
     }
   });
 
@@ -37,13 +35,17 @@ describe('Secure TLS Connection Tests', function() {
       ca,
       debug: true
     });
-  
-    const client = await connection.connect();
+
+    client = await connection.connect();
     expect(client).to.be.an('object');
-    
-    client.destroy(); // Cleanly close the client connection
+
+    // Destroy connection after test finishes
+    await new Promise((resolve) => {
+      client.on('close', resolve);
+      client.destroy();
+    });
   });
-  
+
   it('should connect with TLS and auth', async () => {
     const connection = new Connection({
       host,
@@ -58,8 +60,13 @@ describe('Secure TLS Connection Tests', function() {
       debug: true
     });
 
-    const client = await connection.connect();
+    client = await connection.connect();
     expect(client).to.be.an('object');
-    client.destroy();
+
+    // Destroy connection after test finishes
+    await new Promise((resolve) => {
+      client.on('close', resolve);
+      client.destroy();
+    });
   });
 });

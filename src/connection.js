@@ -116,7 +116,6 @@ class Connection {
       logger.info(`Received unknown message from server: ${JSON.stringify(response)}`);
     }
   }
-    
 
 }
 
