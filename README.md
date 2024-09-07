@@ -22,4 +22,7 @@ npm run test-secure
 
 psql -d "host=127.0.0.1 port=5444 user=stackql sslmode=verify-full sslcert=/home/javen/ssl-test/client_cert.pem sslkey=/home/javen/ssl-test/client_key.pem sslrootcert=/home/javen/ssl-test/server_cert.pem dbname=stackql" -c "\conninfo"
 
-NODE_DEBUG=tls npm run test-secure
+NODE_DEBUG=tls,node::http npm run test-secure
+
+sh start-secure-server.sh
+node example/app.js

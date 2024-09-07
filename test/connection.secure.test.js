@@ -8,9 +8,9 @@ describe('Secure TLS Connection Tests', function() {
 
   const host = '127.0.0.1';
   const port = 5444;
-  const user = 'your_user';
-  const database = 'your_database';
-  const password = 'your_password';
+  const user = 'stackql';
+  const database = 'stackql';
+  const password = 'stackql';
   const cert = fs.readFileSync('/home/javen/ssl-test/client_cert.pem');
   const key = fs.readFileSync('/home/javen/ssl-test/client_key.pem');
   const ca = fs.readFileSync('/home/javen/ssl-test/server_cert.pem');
@@ -69,4 +69,25 @@ describe('Secure TLS Connection Tests', function() {
       client.destroy();
     });
   });
+
+  // it('should run a query with TLS', async () => {
+  //   const connection = new Connection({
+  //     host,
+  //     port,
+  //     user,
+  //     database,
+  //     password,
+  //     cert,
+  //     key,
+  //     ca,
+  //     useTLS: true
+  //   });
+
+  //   const client = await connection.connect();
+  //   const result = await connection.query('REGISTRY LIST');
+  //   expect(result).to.be.an('object');
+  //   expect(result.data).to.be.an('array');
+  //   client.destroy();
+  // });
+
 });
