@@ -13,13 +13,6 @@ stackql-aws-cloud-shell.sh
 stackql-azure-cloud-shell.sh
 stackql-google-cloud-shell.sh
 
-# Ignore everything in the ssl/ directory
-ssl/*
-
-# But do not ignore the openssl.cnf file
-!ssl/openssl.cnf
-ssl/
-
 # OS generated files
 .DS_Store
 Thumbs.db
