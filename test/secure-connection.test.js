@@ -1,7 +1,8 @@
 import { assert } from 'chai';
 import { runQuery } from '../src/index.js';
+import fs from 'fs';
 
-describe('Non-TLS Connection Tests', function () {
+describe('TLS Connection Tests', function () {
   this.timeout(10000); // Set a higher timeout to handle query execution
 
   const connectionOptions = {
@@ -10,7 +11,10 @@ describe('Non-TLS Connection Tests', function () {
     host: 'localhost',
     port: 5444,
     debug: true,
-    useTLS: false, // Non-TLS connection
+    useTLS: true, // TLS connection
+    cert: fs.readFileSync('/home/javen/ssl-test/client_cert.pem'),
+    key: fs.readFileSync('/home/javen/ssl-test/client_key.pem'),
+    ca: fs.readFileSync('/home/javen/ssl-test/server_cert.pem'),
   };
 
   it('should connect and run and run a statement without TLS', async () => {
@@ -19,7 +23,7 @@ describe('Non-TLS Connection Tests', function () {
     assert.isArray(result.data);
   });
 
-  it('should connect and run queries without TLS', async () => {
+  it('should connect and run queries using TLS', async () => {
     const query = "SHOW SERVICES IN homebrew";
     const result = await runQuery(connectionOptions, query);
     assert.isArray(result.data);

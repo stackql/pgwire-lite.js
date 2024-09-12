@@ -1,26 +1,28 @@
 {
   "name": "pgwire-lite",
-  "version": "0.1.0",
-  "main": "src/index.js",
+  "version": "1.0.0",
+  "description": "A lightweight PostgreSQL wire protocol client built with Node.js",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "bash ./start-server.sh && mocha test/connection.test.js && bash ./stop-server.sh",
-    "test-secure": "bash ./start-secure-server.sh && mocha test/connection.secure.test.js && bash ./stop-server.sh"
+    "secure-test": "bash ./start-secure-server.sh && mocha test/secure-connection.test.js && bash ./stop-server.sh"
   },
-  "type": "module",
   "keywords": [
+    "stackql",
     "postgresql",
-    "wire-protocol",
-    "client",
-    "javascript"
+    "pgwire",
+    "wire protocol",
+    "lightweight",
+    "client"
   ],
   "author": "Jeffrey Aven, StackQL Studios",
   "license": "MIT",
-  "description": "A lightweight PostgreSQL wire protocol client in JavaScript",
-  "devDependencies": {
-    "mocha": "^10.7.3"
-  },
   "dependencies": {
-    "chai": "^5.1.1",
     "winston": "^3.14.2"
+  },
+  "devDependencies": {
+    "chai": "^5.1.1",
+    "mocha": "^10.7.3"
   }
 }
