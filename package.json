@@ -1,6 +1,9 @@
 {
-  "name": "pgwire-lite",
+  "name": "@stackql/pgwire-lite",
   "version": "1.0.0",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "A lightweight PostgreSQL wire protocol client built with Node.js",
   "main": "index.js",
   "type": "module",

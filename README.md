@@ -14,7 +14,7 @@ __`pgwire-lite`__ is a minimalistic PostgreSQL wire protocol library for Node.js
 To install `pgwire-lite`, run the following command:
 
 ```bash
-npm install pgwire-lite
+npm i @stackql/pgwire-lite
 ```
 
 ## Quickstart
@@ -104,3 +104,12 @@ curl -L https://bit.ly/stackql-zip -O && unzip stackql-zip
     node example/app.js true
     sh stop-server.sh
     ```
+
+## Publishing
+
+to publish or update on [npmjs](https://www.npmjs.com/org/stackql):
+
+```bash
+npm login
+npm publish --access public
+```
