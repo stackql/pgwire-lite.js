@@ -1,34 +1,106 @@
 # pgwire-lite
 
-pgwire-lite is a minimalistic PostgreSQL wire protocol library for Node.js. It is designed to be a lightweight alternative to other PostgreSQL wire protocol libraries, providing a simple and efficient way to connect to and interact with PostgreSQL databases.
+__`pgwire-lite`__ is a minimalistic PostgreSQL wire protocol library for Node.js. It is designed to be a lightweight alternative to other PostgreSQL wire protocol libraries, providing a simple and efficient way to connect to and interact with PostgreSQL wire protocol-compatible servers, such as [__`stackql`__](https://github.com/stackql/stackql).
+
+## Features
+
+- Lightweight and minimal PostgreSQL wire protocol client
+- Supports both secure (TLS) and non-secure connections
+- Easily customizable and extendable
+- Designed to interact with PostgreSQL wire protocol-compatible services like [__`stackql`__](https://github.com/stackql/stackql)
+
+## Installation
+
+To install `pgwire-lite`, run the following command:
+
+```bash
+npm install pgwire-lite
+```
+
+## Quickstart
+
+Below is an example of how to use `pgwire-lite` to connect to a PostgreSQL-compatible server with both TLS and non-TLS options.
+
+### Example: run queries against a server without TLS
+
+```javascript
+import { runQuery } from 'pgwire-lite';
+const connectionOptions = {
+  user: 'stackql',
+  database: 'stackql',
+  host: 'localhost',
+  port: 5444,
+  debug: false,
+};
+(async () => {
+  try {
+    const result = await runQuery(connectionOptions, "REGISTRY LIST");
+    console.info(result.data);
+  } catch (error) {
+    console.error('Error executing queries:', error.message);
+  }
+})();
+```
+### Example: run queries against a server with TLS
+
+```javascript
+import fs from 'fs';
+import { runQuery } from 'pgwire-lite'; // Importing from the installed package
+const connectionOptions = {
+    user: 'stackql',
+    database: 'stackql',
+    host: 'localhost',
+    port: 5444,
+    debug: true,
+    cert: fs.readFileSync('/path/to/client_cert.pem'),
+    key: fs.readFileSync('/path/to/client_key.pem'),
+    ca: fs.readFileSync('/path/to/server_cert.pem'),
+};
+(async () => {
+  try {
+    const result = await runQuery(connectionOptions, "REGISTRY LIST");
+    console.info(result.data);
+  } catch (error) {
+    console.error('Error executing queries:', error.message);
+  }
+})();
+```
 
 ## Testing
 
-Download [`stackql`](https://github.com/stackql/stackql) using the following to test the package locally:
+You can test `pgwire-lite` using [stackql](https://github.com/stackql/stackql) by following these steps.
 
-```
-curl -L https://bit.ly/stackql-zip -O \
-&& unzip stackql-zip
-```
-
-then run:
+### Step 1: Download stackql
 
 ```bash
-# test without TLS
-npm test
-# test with TLS
-npm run secure-test
+curl -L https://bit.ly/stackql-zip -O && unzip stackql-zip
 ```
 
-psql -d "host=127.0.0.1 port=5444 user=stackql sslmode=verify-full sslcert=/home/javen/ssl-test/client_cert.pem sslkey=/home/javen/ssl-test/client_key.pem sslrootcert=/home/javen/ssl-test/server_cert.pem dbname=stackql" -c "\conninfo"
+### Step 2: Running Tests
 
-NODE_DEBUG=tls,node::http npm run secure-test
+1. **Test without TLS**:
+    ```bash
+    npm test
+    ```
 
-sh start-secure-server.sh
-node example/app.js
+2. **Test with TLS**:
+    ```bash
+    npm run secure-test # or
+    NODE_DEBUG=tls,node::http npm run secure-test
+    ```
 
+### Step 3: Running the Example App (optional)
 
-NODE_DEBUG=tls,node::http node example/app.js true
+1. **Test without TLS**:
+    ```bash
+    sh start-server.sh
+    node example/app.js
+    sh stop-server.sh
+    ```
 
-
-node example/app.js
+2. **Test with TLS**:
+    ```bash
+    sh start-secure-server.sh
+    node example/app.js true
+    sh stop-server.sh
+    ```
