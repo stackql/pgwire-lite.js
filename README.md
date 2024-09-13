@@ -24,7 +24,7 @@ Below is an example of how to use `pgwire-lite` to connect to a PostgreSQL-compa
 ### Example: run queries against a server without TLS
 
 ```javascript
-import { runQuery } from 'pgwire-lite';
+import { runQuery } from '@stackql/pgwire-lite';
 const connectionOptions = {
   user: 'stackql',
   database: 'stackql',
@@ -45,7 +45,7 @@ const connectionOptions = {
 
 ```javascript
 import fs from 'fs';
-import { runQuery } from 'pgwire-lite'; // Importing from the installed package
+import { runQuery } from '@stackql/pgwire-lite';
 const connectionOptions = {
     user: 'stackql',
     database: 'stackql',
