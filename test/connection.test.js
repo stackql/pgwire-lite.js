@@ -1,3 +1,5 @@
+// test/connection.test.js
+
 import { assert } from 'chai';
 import { runQuery } from '../src/index.js';
 
@@ -8,7 +10,9 @@ describe('Non-TLS Connection Tests', function () {
     user: 'stackql',
     database: 'stackql',
     host: 'localhost',
-    port: 5444,
+    // Overridable so CI / local runs can target a non-default server port
+    // (e.g. when another stackql server already owns 5444).
+    port: Number(process.env.PGWIRE_TEST_PORT || 5444),
     debug: true,
     useTLS: false, // Non-TLS connection
   };

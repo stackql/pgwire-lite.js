@@ -1,6 +1,6 @@
 {
   "name": "@stackql/pgwire-lite",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publishConfig": {
     "access": "public"
   },
@@ -8,8 +8,9 @@
   "main": "./src/index.js",
   "type": "module",
   "scripts": {
-    "test": "bash ./start-server.sh && mocha test/connection.test.js && bash ./stop-server.sh",
-    "secure-test": "bash ./start-secure-server.sh && mocha test/secure-connection.test.js && bash ./stop-server.sh"
+    "test": "mocha test/protocol.test.js && bash ./start-server.sh && mocha test/connection.test.js && bash ./stop-server.sh",
+    "secure-test": "bash ./start-secure-server.sh && mocha test/secure-connection.test.js && bash ./stop-server.sh",
+    "test-unit": "mocha test/protocol.test.js"
   },
   "keywords": [
     "stackql",

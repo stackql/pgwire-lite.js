@@ -1,3 +1,5 @@
+// example/app.js
+
 import fs from 'fs';
 import { runQuery } from '../src/index.js'; // Importing from index.js
 

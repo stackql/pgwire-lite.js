@@ -1,3 +1,5 @@
+// src/index.js
+
 import { createLogger, format, transports } from 'winston';
 import { createConnection, createTLSConnection } from './connection.js'; // Import both functions
 

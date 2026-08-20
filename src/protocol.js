@@ -1,3 +1,5 @@
+// src/protocol.js
+
 import { Buffer } from 'buffer';
 
 // Protocol constants
@@ -32,18 +34,26 @@ export function readResponse(socket, logger, type = 'startup') {
         let result = { message: '', data: [] };
         let rowDescription = [];
         let processingComplete = false;
-    
+        // A pgwire message can span multiple TCP 'data' events (any DataRow
+        // larger than one socket chunk). Buffer incoming bytes and only
+        // consume COMPLETE messages - a header (1 type byte + 4 length
+        // bytes) or body that hasn't fully arrived is carried over to the
+        // next event. Without this, oversized rows truncate mid-message and
+        // processDataRow crashes with ERR_OUT_OF_RANGE (and the parser
+        // desyncs on the following chunk).
+        let pending = Buffer.alloc(0);
+
         socket.on('data', (data) => {
+        pending = pending.length ? Buffer.concat([pending, data]) : data;
         let offset = 0;
-        while (offset < data.length) {
-            const messageType = data.toString('utf-8', offset, offset + 1); // Read 1 byte for message type
-            offset += 1;
-    
-            const messageLength = data.readUInt32BE(offset); // Read 4 bytes for length
-            offset += 4;
-    
-            const content = data.slice(offset, offset + messageLength - 4); // Subtract 4 for the length field
-            offset += messageLength - 4;
+        while (pending.length - offset >= 5) {
+            const messageType = pending.toString('utf-8', offset, offset + 1); // 1 byte message type
+            const messageLength = pending.readUInt32BE(offset + 1); // 4 bytes length (includes itself, excludes the type byte)
+            if (pending.length - offset - 1 < messageLength) {
+                break; // incomplete message - wait for the next chunk
+            }
+            const content = pending.slice(offset + 5, offset + 1 + messageLength);
+            offset += 1 + messageLength;
     
             if (messageType === 'R') {
             const authType = content.readUInt32BE(0);
@@ -72,7 +82,8 @@ export function readResponse(socket, logger, type = 'startup') {
                 logger.debug(`unhandled message type: ${messageType}, content: ${content.toString('hex')}`);
             }
         }
-    
+        pending = pending.slice(offset); // keep any incomplete trailing message
+
         // Resolve the promise and stop processing further data once done
         if (processingComplete) {
             socket.removeAllListeners('data'); // Ensure we don't process more data for this type

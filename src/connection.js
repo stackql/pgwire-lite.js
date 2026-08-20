@@ -1,3 +1,5 @@
+// src/connection.js
+
 import net from 'net';
 import tls from 'tls';
 import { createStartupMessage, createQueryMessage, readResponse, encodeSSLRequest } from './protocol.js';

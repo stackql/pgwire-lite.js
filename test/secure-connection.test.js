@@ -1,3 +1,5 @@
+// test/secure-connection.test.js
+
 import { assert } from 'chai';
 import { runQuery } from '../src/index.js';
 import fs from 'fs';
